@@ -11,6 +11,7 @@ yum group install "Web Server" -y
 yum install php -y
 yum group install mariadb mariadb-server -y
 yum install policycoreutils-python -y
+yum install php-mysql -y
 
 
 ## Make httpd and mariadb start on boot
