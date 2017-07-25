@@ -10,7 +10,7 @@ set -e
 if [[ $(cat /etc/redhat-release 2>/dev/null) =~ "7." ]]; then
 	
 	## Fix yum groups
-	yum groups mark convert > /dev/null
+	yum groups mark convert > /dev/null 2>&1
 	
 	## Install httpd, php, mariadb, SELinux utlities
 	echo "Installing httpd, php, mariadb and selinux utilities"
@@ -24,8 +24,8 @@ if [[ $(cat /etc/redhat-release 2>/dev/null) =~ "7." ]]; then
 
 	## Make httpd and mariadb start on boot
 	echo "Making HTTPD and MariaDB start at boot"
-	systemctl enable httpd  > /dev/null
-	systemctl enable mariadb  > /dev/null
+	systemctl enable httpd  > /dev/null 2>&1
+	systemctl enable mariadb  > /dev/null 2>&1
 
 	## Start mariadb
 	echo "Starting database"
