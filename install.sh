@@ -7,54 +7,54 @@
 
 ## Install httpd, php, mariadb, SELinux utlities
 echo "Installing httpd, php, mariadb and selinux utilities"
-yum group install "Web Server" -y
-yum install php -y
-yum group install mariadb mariadb-server -y
-yum install policycoreutils-python -y
-yum install php-mysql -y
+yum group install "Web Server" -y  > /dev/null
+yum install php -y  > /dev/null
+yum group install mariadb mariadb-server -y  > /dev/null
+yum install policycoreutils-python -y  > /dev/null
+yum install php-mysql -y  > /dev/null
 
 
 ## Make httpd and mariadb start on boot
 echo "Making HTTPD and MariaDB start at boot"
-systemctl enable httpd
-systemctl enable mariadb
+systemctl enable httpd  > /dev/null
+systemctl enable mariadb  > /dev/null
 
 ## Start mariadb
 echo "Starting database"
-systemctl start mariadb
+systemctl start mariadb  > /dev/null
 
 ## Copy web files to proper location
 echo "Copying webfiles to /opt/notificationdb"
-mkdir /opt/notificationdb
-mkdir /opt/notificationdb/html
-cp -r ./webfiles/* /opt/notificationdb/html
+mkdir /opt/notificationdb  > /dev/null
+mkdir /opt/notificationdb/html  > /dev/null
+cp -r ./webfiles/* /opt/notificationdb/html  > /dev/null
 
 ## Create database
 echo "Creating database NotificationDB"
-mysql -u root -e 'create database NotificationDB'
+mysql -u root -e 'create database NotificationDB'  > /dev/null
 
 ## Import notifications table into NotificationDB database
 echo "Importing table into database"
-mysql -u root NotificationDB < ./database/NotificationDB.sql
+mysql -u root NotificationDB < ./database/NotificationDB.sql  > /dev/null
 
 ## Configure httpd
 echo "Configuring HTTPD service"
-cp ./conf/notificationdb.conf /etc/httpd/conf.d/notificationdb.conf
+cp ./conf/notificationdb.conf /etc/httpd/conf.d/notificationdb.conf  > /dev/null
 
 ## Enable firewall for port 8989
 echo "Opening firewall port 8989"
-firewall-cmd --add-port=8989/tcp --permanent
-firewall-cmd --reload
+firewall-cmd --add-port=8989/tcp --permanent  > /dev/null
+firewall-cmd --reload  > /dev/null
 
 ## Fix SELinux permissions
 echo "Fixing SELinux permissions"
-semanage port -a -t http_port_t -p tcp 8989
-semanage fcontext -a -t httpd_sys_content_t "/opt/notificationdb(/.*)?"
-restorecon -Rv /opt/notificationdb
+semanage port -a -t http_port_t -p tcp 8989  > /dev/null
+semanage fcontext -a -t httpd_sys_content_t "/opt/notificationdb(/.*)?"  > /dev/null
+restorecon -Rv /opt/notificationdb  > /dev/null
 
 ## Start httpd
 echo "Starting httpd service"
-systemctl start httpd
+systemctl start httpd  > /dev/null
 
 IP=`hostname -I | awk '{ print $1 }'`
 
