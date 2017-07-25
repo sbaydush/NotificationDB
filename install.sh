@@ -4,6 +4,8 @@
 ## create the notification table,install httpd, configure the website and make it auto start on boot.
 ## You will need to create an htaccess file yourself if you wish to lockdown the site.
 
+## halts script on error
+set -e
 
 ## Install httpd, php, mariadb, SELinux utlities
 echo "Installing httpd, php, mariadb and selinux utilities"
