@@ -8,10 +8,8 @@
     }
  }
  
-// get the HTTP method, path and body of the request
+// get the HTTP method
 $method = $_SERVER['REQUEST_METHOD'];
-$request = explode('/', trim($_SERVER['PATH_INFO'],'/'));
-
 
 
 $input = json_decode(file_get_contents('php://input'),true);
@@ -19,11 +17,16 @@ $input = json_decode(file_get_contents('php://input'),true);
 // connect to the mysql database
 $link = mysqli_connect('localhost', 'root', '', 'NotificationDB');
 mysqli_set_charset($link,'utf8');
- 
-// retrieve the table and key from the path
-//$table = preg_replace('/[^a-z0-9_]+/i','',array_shift($request));
-$key = array_shift($request)+0;
-//$key = preg_replace('/[^a-z0-9_]+/i','',array_shift($request));
+
+
+//Only extracts the body of the request and key from the path if updating, deleting or getting something from the database. Inserting a new row doesn't need a key in the path so this is not required.
+if ($method=="GET" OR $method=="PUT" OR $method=="DELETE")
+{	
+	//Get the body of the request
+	$request = explode('/', trim($_SERVER['PATH_INFO'],'/'));
+	// retrieve the key from the path
+	$key = array_shift($request)+0;
+}
 
 // escape the columns and values from the input object
 $columns = preg_replace('/[^a-z0-9_]+/i','',array_keys($input));
@@ -41,8 +44,6 @@ for ($i=0;$i<count($columns);$i++) {
 $set.=',`SourceIP`="'.getRealUserIp().'"';
 
 
- //SET IP VIA PHP command instead of sending it as part of the POST
- //$_SERVER['REMOTE_ADDR']
  
 
 // create SQL based on HTTP method

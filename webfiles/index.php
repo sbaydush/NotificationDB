@@ -8,6 +8,11 @@
 
 
 <html>
+<head>
+<link rel="shortcut icon" href="images/ndb.ico" />
+<title>NotificationDB</title>
+</head>
+
 <body>
 <table id="ntable" class="display">
 	<thead>
@@ -45,19 +50,19 @@ if ($result->num_rows > 0) {
 		
 		switch ($row["Severity"]) {
 			case "Info":
-				$imagepath = "info.png";
+				$imagepath = "images/info.png";
 				break;
 			case "Warning":
-				$imagepath = "warning.png";
+				$imagepath = "images/warning.png";
 				break;
 			case "Error":
-				$imagepath = "error.png";
+				$imagepath = "images/error.png";
 				break;
 			case "Critical":
-				$imagepath = "critical.png";
+				$imagepath = "images/critical.png";
 				break;
 			default:
-				$imagepath = "info.png";
+				$imagepath = "images/info.png";
 		}
 		
 		echo "<tr>";
