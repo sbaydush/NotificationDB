@@ -9,11 +9,15 @@ set -e
 
 if [[ $(cat /etc/redhat-release 2>/dev/null) =~ "7." ]]; then
 	
+	## Fix yum groups
+	yum groups mark convert > /dev/null
+	
 	## Install httpd, php, mariadb, SELinux utlities
 	echo "Installing httpd, php, mariadb and selinux utilities"
 	yum group install "Web Server" -y  > /dev/null
 	yum install php -y  > /dev/null
-	yum group install mariadb mariadb-server -y  > /dev/null
+	yum group install mariadb -y  > /dev/null
+	yum install mariadb-server -y > /dev/null
 	yum install policycoreutils-python -y  > /dev/null
 	yum install php-mysql -y  > /dev/null
 
