@@ -7,6 +7,15 @@
       default : return $_SERVER['REMOTE_ADDR'];
     }
  }
+
+$settings = parse_ini_file('conf/settings.conf');
+
+$servername = $settings['DatabaseIP'];
+$username = $settings['DatabaseUser'];
+$password = $settings['DatabasePass'];
+$dbname = $settings['DatabaseName'];
+$dbtable = $settings['DatabaseTableName'];
+$dbport = $settings['DatabasePort'];
  
 // get the HTTP method
 $method = $_SERVER['REQUEST_METHOD'];
@@ -15,7 +24,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 $input = json_decode(file_get_contents('php://input'),true);
  
 // connect to the mysql database
-$link = mysqli_connect('localhost', 'root', '', 'NotificationDB');
+$link = mysqli_connect($servername, $username, $password, $dbname, $dbport);
 mysqli_set_charset($link,'utf8');
 
 
@@ -49,13 +58,13 @@ $set.=',`SourceIP`="'.getRealUserIp().'"';
 // create SQL based on HTTP method
 switch ($method) {
   case 'GET':
-	$sql = "select * from NotificationDB.notifications".($key?" WHERE id=$key":''); break;
+	$sql = "select * from ".$dbname.".".$dbtable.($key?" WHERE id=$key":''); break;
   case 'PUT':
-    $sql = "update NotificationDB.notifications set $set where id=$key"; break;
+    $sql = "update ".$dbname.".".$dbtable." set $set where id=$key"; break;
   case 'POST':
-    $sql = "insert into NotificationDB.notifications set $set"; break;
+    $sql = "insert into ".$dbname.".".$dbtable." set $set"; break;
   case 'DELETE':
-    $sql = "delete NotificationDB.notifications where id=$key"; break;
+    $sql = "delete ".$dbname.".".$dbtable." where id=$key"; break;
 }
  
 // excecute SQL statement

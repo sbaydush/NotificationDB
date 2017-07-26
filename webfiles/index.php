@@ -9,6 +9,7 @@
 
 <html>
 <head>
+<link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
 <link rel="shortcut icon" href="images/ndb.ico" />
 <title>NotificationDB</title>
 </head>
@@ -28,19 +29,24 @@
 	<tbody>
 		
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "NotificationDB";
+$settings = parse_ini_file('conf/settings.conf');
+
+
+$servername = $settings['DatabaseIP'];
+$username = $settings['DatabaseUser'];
+$password = $settings['DatabasePass'];
+$dbname = $settings['DatabaseName'];
+$dbtable = $settings['DatabaseTableName'];
+$dbport = $settings['DatabasePort'];
 
 // Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli($servername, $username, $password, $dbname, $dbport);
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
-$sql = "SELECT Source,Severity,Content,Timestamp,SourceIP FROM NotificationDB.notifications";
+$sql = "SELECT Source,Severity,Content,Timestamp,SourceIP FROM ".$dbname.".".$dbtable;
 $result = $conn->query($sql);
 
 

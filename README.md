@@ -24,7 +24,7 @@ You will need to install the following:
 	5) import the database/NotificationDB.sql file into the database
 	6) Open firewall port on the server (default is 8989 which is changable in the notificationdb.conf file.
 	7) Start httpd service
-	8) If you used a different database name or username/password, modify the index.php and api.php files in the /opt/notificationdb/html folder to reflect the new settings
+	8) If you used a different database name or username/password, modify the settings.conf file in the /opt/notificationdb/html/config folder to reflect the new settings
 	9) Visit the url of your server (example: http://192.168.1.100:8989/)
 	
 
