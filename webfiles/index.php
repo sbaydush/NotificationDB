@@ -29,7 +29,7 @@
 	<tbody>
 		
 <?php
-$settings = parse_ini_file('conf/settings.conf');
+$settings = parse_ini_file('conf/settings.ini');
 
 
 $servername = $settings['DatabaseIP'];
