@@ -29,14 +29,14 @@ You will need to install the following:
 	
 
 
-EXAMPLES: (example server is using 192.168.1.100 as its IP)
+EXAMPLES: (example server is using 192.168.1.100 as its IP and port 8989 as its port)
 Curl command to add row to database:
 
-  curl http://192.168.1.100/api.php -X POST -d '{"Source":"Server1","Severity":"Error","Content": "'"This is an example error message"'."}'
+  curl http://192.168.1.100:8989/api.php -X POST -d '{"Source":"Server1","Severity":"Error","Content": "'"This is an example error message"'."}'
   
 Curl command to add row to database using htaccess for password authentication:
 
-   curl http://192.168.1.100/api.php -u user1:password1324 -X POST -d '{"Source":"Server1","Severity":"Error","Content": "'"This is an example error message"'."}'
+   curl http://192.168.1.100:8989/api.php -u user1:password1324 -X POST -d '{"Source":"Server1","Severity":"Error","Content": "'"This is an example error message"'."}'
 
 View database via webpage:
-  http://192.168.1.100/
+  http://192.168.1.100:8989/
