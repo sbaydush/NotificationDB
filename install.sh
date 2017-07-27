@@ -61,18 +61,29 @@ if [[ $(cat /etc/redhat-release 2>/dev/null) =~ "7." ]]; then
 	printf "Do you want to secure the website and api url with htaccess? (yes/no)"
 	read secure
 
-	while [[ x$secure != xyes && x$secure != xno ]]
+	while [[ "$secure" != "yes" && "$secure" != "no" ]]
 	do
 		echo you have entered an invalid response. Please try again
-		read answer
+		printf "Do you want to secure the website and api url with htaccess? (yes/no)"
+		read secure
 	done
 	
-	if [[ "$secure" = "yes" ]]
+	if [ "$secure" = "yes" ]
 	then
 		echo "Locking down url with htaccess"
-		printf "Enter the username you wish to have access to the site with: "
-		read htuser
-		htpasswd -c /opt/notificationdb/.htpasswd "$htuser"
+		while [ "$htuser" == "" ]
+		do
+			printf "Enter the username you wish to have access to the site with: "
+			read htuser
+		done
+		
+		while [ "$htpass" == "" ]
+		do
+			printf "Enter the password for $htuser: "
+			read htpass
+		done
+		
+		htpasswd -bc /opt/notificationdb/.htpasswd "$htuser" "$htpass"
 	else
 		echo "Skipping htaccess lockdown"
 	fi
@@ -80,7 +91,7 @@ if [[ $(cat /etc/redhat-release 2>/dev/null) =~ "7." ]]; then
 	
 	## Configure httpd
 	echo "Configuring HTTPD service"
-	if [[ "$secure" = "yes" ]]
+	if [ "$secure" = "yes" ]
 	then
 		cp ./conf/notificationdb_secure.conf /etc/httpd/conf.d/notificationdb.conf > /dev/null
 	else
