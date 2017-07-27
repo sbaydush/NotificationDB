@@ -18,7 +18,7 @@ if [[ $(cat /etc/lsb-release 2>/dev/null) =~ "Ubuntu" ]]; then
 	apt-get install php -y  > /dev/null
 	apt-get install mariadb-server -y > /dev/null
 	apt-get install php-mysql -y  > /dev/null
-	apt-get install libapache2-mod-php7.0
+	apt-get install libapache2-mod-php7.0 -y > /dev/null
 
 
 	## Make httpd and mariadb start on boot
@@ -93,7 +93,7 @@ if [[ $(cat /etc/lsb-release 2>/dev/null) =~ "Ubuntu" ]]; then
 	then
 		cp ./conf/notificationdb_secure.conf /etc/apache2/sites-available/notificationdb.conf > /dev/null
 	else
-		cp ./conf/notificationdb.conf /etc/apache2/sites-availble/notificationdb.conf  > /dev/null
+		cp ./conf/notificationdb.conf /etc/apache2/sites-available/notificationdb.conf  > /dev/null
 	fi
 	a2ensite /etc/apache2/sites-available/notificationdb.conf
 	
