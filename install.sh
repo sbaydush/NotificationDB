@@ -45,10 +45,6 @@ if [[ $(cat /etc/redhat-release 2>/dev/null) =~ "7." ]]; then
 	echo "Importing table into database"
 	mysql -u root NotificationDB < ./database/NotificationDB.sql  > /dev/null
 
-	## Configure httpd
-	echo "Configuring HTTPD service"
-	cp ./conf/notificationdb.conf /etc/httpd/conf.d/notificationdb.conf  > /dev/null
-
 	## Enable firewall for port 8989
 	echo "Opening firewall port 8989"
 	firewall-cmd --add-port=8989/tcp --permanent  > /dev/null
@@ -60,6 +56,39 @@ if [[ $(cat /etc/redhat-release 2>/dev/null) =~ "7." ]]; then
 	semanage fcontext -a -t httpd_sys_content_t "/opt/notificationdb(/.*)?"  > /dev/null
 	restorecon -Rv /opt/notificationdb  > /dev/null
 
+	
+	## htaccess lockdown of site
+	printf "Do you want to secure the website and api url with htaccess? (yes/no)"
+	read secure
+
+	while [[ x$secure != xyes && x$secure != xno ]]
+	do
+		echo you have entered an invalid response. Please try again
+		read answer
+	done
+	
+	if [[ "$secure" = "yes" ]]
+	then
+		echo "Locking down url with htaccess"
+		printf "Enter the username you wish to have access to the site with: "
+		read htuser
+		htpasswd -c /opt/notificationdb/.htpasswd "$htuser"
+	else
+		echo "Skipping htaccess lockdown"
+	fi
+	
+	
+	## Configure httpd
+	echo "Configuring HTTPD service"
+	if [[ "$secure" = "yes" ]]
+	then
+		cp ./conf/notificationdb_secure.conf /etc/httpd/conf.d/notificationdb.conf > /dev/null
+	else
+		cp ./conf/notificationdb.conf /etc/httpd/conf.d/notificationdb.conf  > /dev/null
+	fi
+	
+	
+	
 	## Start httpd
 	echo "Starting httpd service"
 	systemctl start httpd  > /dev/null
