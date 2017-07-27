@@ -9,11 +9,8 @@ set -e
 
 if [[ $(cat /etc/lsb-release 2>/dev/null) =~ "Ubuntu" ]]; then
 	
-	## Fix yum groups
-	#yum groups mark convert > /dev/null 2>&1
-	
-	## Install httpd, php, mariadb, SELinux utlities
-	echo "Installing httpd, php and mariadb"
+	## Install apache2, php, mariadb
+	echo "Installing Apache2, PHP and MariaDB"
 	apt-get install apache2 -y  > /dev/null
 	apt-get install php -y  > /dev/null
 	apt-get install mariadb-server -y > /dev/null
@@ -21,8 +18,8 @@ if [[ $(cat /etc/lsb-release 2>/dev/null) =~ "Ubuntu" ]]; then
 	apt-get install libapache2-mod-php7.0 -y > /dev/null
 
 
-	## Make httpd and mariadb start on boot
-	echo "Making HTTPD and MariaDB start at boot"
+	## Make Apache2 and mariadb start on boot
+	echo "Making Apache2 and MariaDB start at boot"
 	systemctl enable apache2 > /dev/null 2>&1
 	systemctl enable mysql  > /dev/null 2>&1
 
@@ -87,21 +84,23 @@ if [[ $(cat /etc/lsb-release 2>/dev/null) =~ "Ubuntu" ]]; then
 	fi
 	
 	
-	## Configure httpd
-	echo "Configuring HTTPD service"
+	## Configure Apache2
+	echo "Configuring Apache2 service"
 	if [ "$secure" = "yes" ]
 	then
-		cp ./conf/notificationdb_secure.conf /etc/apache2/sites-available/notificationdb.conf > /dev/null
+		cp ./conf/notificationdb_secure-apache2.conf /etc/apache2/sites-available/notificationdb.conf > /dev/null
 	else
-		cp ./conf/notificationdb.conf /etc/apache2/sites-available/notificationdb.conf  > /dev/null
+		cp ./conf/notificationdb-apache2.conf /etc/apache2/sites-available/notificationdb.conf  > /dev/null
 	fi
-	a2ensite /etc/apache2/sites-available/notificationdb.conf
+	cd /etc/apache2/sites-available
+	a2ensite notificationdb.conf
 	
 	
 	
-	## Start httpd
-	echo "Starting httpd service"
-	systemctl start httpd  > /dev/null
+	## Start Apache2
+	echo "Start Apache2 service"
+	systemctl start apache2  > /dev/null
+	service apache2 reload
 
 	IP=`hostname -I | awk '{ print $1 }'`
 
