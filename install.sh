@@ -45,6 +45,13 @@ if [[ $(cat /etc/redhat-release 2>/dev/null) =~ "7." ]]; then
 	echo "Importing table into database"
 	mysql -u root NotificationDB < ./database/NotificationDB.sql  > /dev/null
 
+	## Creating Database user
+        echo "Creating database user"
+        mysql -u root -e "CREATE USER 'ndb'@'localhost' IDENTIFIED BY 'password123';"
+        mysql -u root -e "GRANT ALL PRIVILEGES ON NotificationDB.notifications TO 'ndb'@'localhost';"
+        mysql -u root -e "FLUSH PRIVILEGES;"
+
+
 	## Enable firewall for port 8989
 	echo "Opening firewall port 8989"
 	firewall-cmd --add-port=8989/tcp --permanent  > /dev/null

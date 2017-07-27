@@ -7,28 +7,28 @@
 ## halts script on error
 set -e
 
-if [[ $(cat /etc/redhat-release 2>/dev/null) =~ "7." ]]; then
+if [[ $(cat /etc/lsb-release 2>/dev/null) =~ "Ubuntu" ]]; then
 	
 	## Fix yum groups
 	#yum groups mark convert > /dev/null 2>&1
 	
 	## Install httpd, php, mariadb, SELinux utlities
 	echo "Installing httpd, php and mariadb"
-	apt install httpd* -y  > /dev/null
-	apt install php -y  > /dev/null
-	apt group install mariadb -y  > /dev/null
-	apt install mariadb-server -y > /dev/null
-	apt install php-mysql -y  > /dev/null
+	apt-get install apache2 -y  > /dev/null
+	apt-get install php -y  > /dev/null
+	apt-get install mariadb-server -y > /dev/null
+	apt-get install php-mysql -y  > /dev/null
+	apt-get install libapache2-mod-php7.0
 
 
 	## Make httpd and mariadb start on boot
 	echo "Making HTTPD and MariaDB start at boot"
-	systemctl enable httpd  > /dev/null 2>&1
-	systemctl enable mariadb  > /dev/null 2>&1
+	systemctl enable apache2 > /dev/null 2>&1
+	systemctl enable mysql  > /dev/null 2>&1
 
 	## Start mariadb
 	echo "Starting database"
-	systemctl start mariadb  > /dev/null
+	systemctl start mysql  > /dev/null
 
 	## Copy web files to proper location
 	echo "Copying webfiles to /opt/notificationdb"
@@ -43,6 +43,13 @@ if [[ $(cat /etc/redhat-release 2>/dev/null) =~ "7." ]]; then
 	## Import notifications table into NotificationDB database
 	echo "Importing table into database"
 	mysql -u root NotificationDB < ./database/NotificationDB.sql  > /dev/null
+
+	## Creating Database user
+	echo "Creating database user"
+	mysql -u root -e "CREATE USER 'ndb'@'localhost' IDENTIFIED BY 'password123';"
+	mysql -u root -e "GRANT ALL PRIVILEGES ON NotificationDB.notifications TO 'ndb'@'localhost';"
+	mysql -u root -e "FLUSH PRIVILEGES;"
+
 
 	## Enable firewall for port 8989
 	echo "Opening firewall port 8989"
@@ -84,10 +91,11 @@ if [[ $(cat /etc/redhat-release 2>/dev/null) =~ "7." ]]; then
 	echo "Configuring HTTPD service"
 	if [ "$secure" = "yes" ]
 	then
-		cp ./conf/notificationdb_secure.conf /etc/httpd/conf.d/notificationdb.conf > /dev/null
+		cp ./conf/notificationdb_secure.conf /etc/apache2/sites-available/notificationdb.conf > /dev/null
 	else
-		cp ./conf/notificationdb.conf /etc/httpd/conf.d/notificationdb.conf  > /dev/null
+		cp ./conf/notificationdb.conf /etc/apache2/sites-availble/notificationdb.conf  > /dev/null
 	fi
+	a2ensite /etc/apache2/sites-available/notificationdb.conf
 	
 	
 	
