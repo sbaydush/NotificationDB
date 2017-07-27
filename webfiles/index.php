@@ -9,7 +9,6 @@
 
 <html>
 <head>
-<link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
 <link rel="shortcut icon" href="images/ndb.ico" />
 <title>NotificationDB</title>
 </head>
