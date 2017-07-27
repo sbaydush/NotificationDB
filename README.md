@@ -6,7 +6,7 @@ This lets you setup a database that can be queried and written to using Curl com
 
 INSTALLATION:
 
-There is an install.sh file that will install the whole thing on a CentOS 7 or RHEL 7 system. It doesn't work for any other systems at the moment.
+There is an install_centos7.sh and an install_ubuntu16.sh install script that will install the application for you on centos7/rhel7 or ubuntu respectivly. If you need to run this on another distribution, please follow the below manual steps.
 
 Manual Install:
 You will need to install the following:
