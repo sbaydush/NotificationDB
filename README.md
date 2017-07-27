@@ -8,7 +8,7 @@ This application lets you setup a database that can be queried and written to us
 
 INSTALLATION:
 
-There is an install_centos7.sh and an install_ubuntu16.sh install script that will install the application for you on centos7/rhel7 or ubuntu respectivly. If you need to run this on another distribution, please follow the below manual steps.
+There is an install_centos7.sh and an install_ubuntu16.sh install script that will install the application for you on centos7/rhel7 or ubuntu 16.04 LTS respectively. If you need to run this on another distribution, please follow the below manual steps.
 
 Manual Install:
 You will need to install the following:
