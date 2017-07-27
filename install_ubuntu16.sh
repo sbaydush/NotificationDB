@@ -93,7 +93,7 @@ if [[ $(cat /etc/lsb-release 2>/dev/null) =~ "Ubuntu" ]]; then
 		cp ./conf/notificationdb-apache2.conf /etc/apache2/sites-available/notificationdb.conf  > /dev/null
 	fi
 	cd /etc/apache2/sites-available
-	a2ensite notificationdb.conf
+	a2ensite notificationdb.conf > /dev/null
 	
 	
 	
